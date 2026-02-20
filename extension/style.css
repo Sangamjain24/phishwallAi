@@ -1,0 +1,70 @@
+body {
+  width: 300px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  background-color: #0b0e14;
+}
+
+.container {
+  padding: 20px;
+  background-image: linear-gradient(rgba(11, 14, 20, 0.8), rgba(11, 14, 20, 0.8)), url('logo.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #1a1f29;
+}
+
+h2 {
+  margin-top: 0;
+  color: #00d4ff;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+button {
+  background: linear-gradient(45deg, #007bff, #00d4ff);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+button:hover {
+  background: linear-gradient(45deg, #0056b3, #00b8e6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+.hidden {
+  display: none;
+}
+
+.safe {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.phishing {
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.safe-bg {
+  border: 5px solid #28a745;
+}
+
+.phishing-bg {
+  border: 5px solid #dc3545;
+}

@@ -1,0 +1,62 @@
+#phishdetector-alert {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999999;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.5s ease;
+    background: #333;
+    color: white;
+    pointer-events: none;
+    /* Let clicks pass through if covering something important, unless we add a close button */
+}
+
+.pd-safe {
+    background-color: #28a745 !important;
+    color: white !important;
+    border: 2px solid #1e7e34;
+}
+
+.pd-phishing {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border: 2px solid #bd2130;
+    font-size: 20px !important;
+    animation: pd-pulse 1s infinite;
+}
+
+.pd-spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: pd-spin 1s ease-in-out infinite;
+    margin-right: 8px;
+}
+
+@keyframes pd-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pd-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

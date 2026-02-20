@@ -1,6 +1,7 @@
 #importing required libraries
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
+from flask_cors import CORS
 import numpy as np
 import pandas as pd
 from sklearn import metrics
@@ -16,6 +17,7 @@ file.close()
 
 
 app = Flask(__name__)
+CORS(app)
 #from flask import Flask, render_template, request
 @app.route("/")
 def home():
@@ -40,5 +42,23 @@ def predict():
 @app.route('/usecases', methods=['GET', 'POST'])
 def usecases():
     return render_template('usecases.html')
+@app.route('/api/predict', methods=['POST'])
+def api_predict():
+    data = request.get_json()
+    url = data['url']
+    obj = FeatureExtraction(url)
+    x = np.array(obj.getFeaturesList()).reshape(1,30)
+    y_pred = gbc.predict(x)[0]
+    # 1 is safe, -1 is unsafe
+    
+    label = "Safe" if y_pred == 1 else "Phishing"
+    
+    return jsonify({
+        'url': url,
+        'prediction': label,
+
+        'is_safe': int(y_pred) == 1
+    })
+
 if __name__ == "__main__":
     app.run(debug=True)
