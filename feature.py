@@ -124,7 +124,7 @@ class FeatureExtraction:
     # 6.prefixSuffix
     def prefixSuffix(self):
         try:
-            match = re.findall('\-', self.domain)
+            match = re.findall(r'\-', self.domain)
             if match:
                 return -1
             return 1
@@ -133,7 +133,7 @@ class FeatureExtraction:
 
     # 7.SubDomains
     def SubDomains(self):
-        dot_count = len(re.findall("\.", self.url))
+        dot_count = len(re.findall(r"\.", self.url))
         if dot_count == 1:
             return 1
         elif dot_count == 2:
