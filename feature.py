@@ -317,7 +317,7 @@ class FeatureExtraction:
     # 17. InfoEmail
     def InfoEmail(self):
         try:
-            if re.findall(r"[mail\(\)|mailto:?]", self.soap):
+            if re.findall(r"[mail\(\)|mailto:?]", self.soup):
                 return -1
             else:
                 return 1
@@ -425,7 +425,7 @@ class FeatureExtraction:
     # 26. WebsiteTraffic
     def WebsiteTraffic(self):
         try:
-            rank = BeautifulSoup(urllib.request.urlopen("http://data.alexa.com/data?cli=10&dat=s&url=" + url).read(),
+            rank = BeautifulSoup(urllib.request.urlopen("http://data.alexa.com/data?cli=10&dat=s&url=" + self.url).read(),
                                  "xml").find("REACH")['RANK']
             if (int(rank) < 100000):
                 return 1
