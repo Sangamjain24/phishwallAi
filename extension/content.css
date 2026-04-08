@@ -1,33 +1,35 @@
 #phishdetector-alert {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 999999;
-    padding: 15px 25px;
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    font-size: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: opacity 0.5s ease;
-    background: #333;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2147483647;
+    padding: 16px 28px;
+    border-radius: 14px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     pointer-events: none;
-    /* Let clicks pass through if covering something important, unless we add a close button */
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .pd-safe {
-    background-color: #28a745 !important;
-    color: white !important;
-    border: 2px solid #1e7e34;
+    background-color: rgba(0, 255, 136, 0.95) !important;
+    color: #064e3b !important;
+    border-color: #059669 !important;
 }
 
 .pd-phishing {
-    background-color: #dc3545 !important;
+    background-color: rgba(255, 77, 77, 0.95) !important;
     color: white !important;
-    border: 2px solid #bd2130;
-    font-size: 20px !important;
-    animation: pd-pulse 1s infinite;
+    border-color: #ef4444 !important;
+    animation: pd-pulse 1s infinite alternate;
 }
 
 .pd-spinner {

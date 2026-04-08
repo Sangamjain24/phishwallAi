@@ -37,14 +37,14 @@ async function scanPage() {
         const data = await response.json();
 
         if (data.is_safe) {
-            updateAlertBox(alertBox, 'SAFE', 'pd-safe');
+            updateAlertBox(alertBox, data.prediction, 'pd-safe');
             // Auto-hide safe message after 3 seconds
             setTimeout(() => {
                 alertBox.style.opacity = '0';
                 setTimeout(() => alertBox.remove(), 500);
             }, 3000);
         } else {
-            updateAlertBox(alertBox, 'PHISHING DETECTED!', 'pd-phishing');
+            updateAlertBox(alertBox, data.prediction, 'pd-phishing');
             // Keep phishing warning visible
         }
 

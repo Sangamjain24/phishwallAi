@@ -32,13 +32,13 @@ document.getElementById('scanBtn').addEventListener('click', async () => {
     resultDiv.classList.remove('hidden');
     
     if (data.is_safe) {
-      predictionP.textContent = 'Safe';
-      predictionP.className = 'safe';
-      document.body.className = 'safe-bg';
+      predictionP.textContent = data.prediction;
+      predictionP.className = 'safe-text';
+      resultDiv.classList.remove('pulse');
     } else {
-      predictionP.textContent = 'PHISHING DETECTED!';
-      predictionP.className = 'phishing';
-      document.body.className = 'phishing-bg';
+      predictionP.textContent = data.prediction;
+      predictionP.className = 'danger-text';
+      resultDiv.classList.add('pulse');
     }
 
   } catch (error) {
