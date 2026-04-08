@@ -237,7 +237,7 @@ class FeatureExtraction:
             except:
                 return 0
         except:
-            return 1
+            return 0
 
     # 14. AnchorURL
     def AnchorURL(self):
@@ -258,10 +258,10 @@ class FeatureExtraction:
                 else:
                     return -1
             except:
-                return 1
+                return 0
 
         except:
-            return 1
+            return 0
 
     # 15. LinksInScriptTags
     def LinksInScriptTags(self):
@@ -444,9 +444,9 @@ class FeatureExtraction:
             if site:
                 return 1
             else:
-                return 1 # Default to safe if not found (Google Search API is unreliable in cloud)
+                return 0 # Neutral if not found
         except:
-            return 1
+            return 0
 
     # 29. LinksPointingToPage
     def LinksPointingToPage(self):
