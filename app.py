@@ -19,7 +19,9 @@ TRUSTED_DOMAINS = {
     'wikipedia.org', 'microsoft.com', 'apple.com', 'vercel.app', 'vercel.com',
     'gmail.com', 'yahoo.com', 'outlook.com', 'bing.com', 'duckduckgo.com',
     'reddit.com', 'stackoverflow.com', 'medium.com', 'spotify.com', 'canva.com',
-    'zoom.us', 'pinterest.com', 'quora.com', 'dropbox.com', 'adobe.com'
+    'zoom.us', 'pinterest.com', 'quora.com', 'dropbox.com', 'adobe.com',
+    'wixsite.com', 'weebly.com', 'blogspot.com', 'netlify.app', 'web.app',
+    'firebaseapp.com', 'pages.dev', '000webhostapp.com', 'godaddy.com'
 }
 
 def is_on_safelist(url):
@@ -44,7 +46,8 @@ def is_on_safelist(url):
 # Brand Protection: Keywords often misused in subdomains
 SUSPICIOUS_KEYWORDS = {
     'att', 'paypal', 'microsoft', 'apple', 'google', 'login', 'secure', 
-    'account', 'verify', 'billing', 'support', 'amazon', 'bank', 'netflix'
+    'account', 'verify', 'billing', 'support', 'amazon', 'bank', 'netflix',
+    'security', 'update', 'signin', 'service', 'office', 'wallet', 'crypto'
 }
 
 def is_highly_suspicious(url):
