@@ -41,6 +41,11 @@ document.getElementById('scanBtn').addEventListener('click', async () => {
       resultDiv.classList.add('pulse');
     }
 
+    const visitBtn = document.getElementById('visitBtn');
+    visitBtn.textContent = data.action || 'Visit Site';
+    visitBtn.classList.remove('hidden');
+    visitBtn.onclick = () => window.open(tab.url, '_blank');
+
   } catch (error) {
     console.error('Error:', error);
     statusDiv.innerHTML = '<p style="color:red;">Error connecting to server. Is app.py running?</p>';
