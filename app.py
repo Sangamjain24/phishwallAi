@@ -39,6 +39,7 @@ def predict():
         #xx =y_pred
         name=convertion(url,int(y_pred))
         return render_template("index.html", name=name)
+    return render_template("index.html")
 @app.route('/usecases', methods=['GET', 'POST'])
 def usecases():
     return render_template('usecases.html')
