@@ -41,6 +41,30 @@ def is_on_safelist(url):
     except:
         return False
 
+# Brand Protection: Keywords often misused in subdomains
+SUSPICIOUS_KEYWORDS = {
+    'att', 'paypal', 'microsoft', 'apple', 'google', 'login', 'secure', 
+    'account', 'verify', 'billing', 'support', 'amazon', 'bank', 'netflix'
+}
+
+def is_highly_suspicious(url):
+    try:
+        from urllib.parse import urlparse
+        domain_parts = urlparse(url).netloc.lower().split('.')
+        # If there's a subdomain (e.g., att1.godaddysites.com)
+        if len(domain_parts) > 2:
+            subdomain = domain_parts[0]
+            base_domain = domain_parts[1]
+            
+            for keyword in SUSPICIOUS_KEYWORDS:
+                # If keyword is in subdomain but NOT in the base domain
+                # e.g., 'att1' in 'godaddysites.com' but NOT 'att.com'
+                if keyword in subdomain and keyword not in base_domain:
+                    return True
+        return False
+    except:
+        return False
+
 file = open("newmodel.pkl","rb")
 gbc = pickle.load(file)
 file.close()
@@ -58,9 +82,14 @@ def predict():
     if request.method == "POST":
         url = request.form["name"]
         
-        # Check Safelist first
+        # 1. Check Safelist first
         if is_on_safelist(url):
             name = [url, "Safe", "Continue", "1"]
+            return render_template("index.html", name=name)
+        
+        # 2. Check for Brand Hijacking (Highly Suspicious)
+        if is_highly_suspicious(url):
+            name = [url, "Not Safe", "Suspicious Brand Keyword Detected", ""]
             return render_template("index.html", name=name)
 
         obj = FeatureExtraction(url)
@@ -80,13 +109,22 @@ def api_predict():
     data = request.get_json()
     url = data['url']
 
-    # Check Safelist first
+    # 1. Check Safelist first
     if is_on_safelist(url):
         return jsonify({
             'url': url,
             'prediction': 'Safe',
             'action': 'Continue',
             'is_safe': True
+        })
+    
+    # 2. Check for Brand Hijacking (Highly Suspicious)
+    if is_highly_suspicious(url):
+        return jsonify({
+            'url': url,
+            'prediction': 'Not Safe',
+            'action': 'Suspicious Brand Keyword Detected',
+            'is_safe': False
         })
 
     obj = FeatureExtraction(url)
