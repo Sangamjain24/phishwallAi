@@ -125,11 +125,11 @@ class FeatureExtraction:
     def prefixSuffix(self):
         try:
             match = re.findall(r'\-', self.domain)
-            if match:
+            if match and len(self.domain.split('.')) > 2: # Only penalize if it's a subdomain hyphen
                 return -1
             return 1
         except:
-            return -1
+            return 1
 
     # 7.SubDomains
     def SubDomains(self):
@@ -237,7 +237,7 @@ class FeatureExtraction:
             except:
                 return 0
         except:
-            return -1
+            return 1
 
     # 14. AnchorURL
     def AnchorURL(self):
@@ -258,10 +258,10 @@ class FeatureExtraction:
                 else:
                     return -1
             except:
-                return -1
+                return 1
 
         except:
-            return -1
+            return 1
 
     # 15. LinksInScriptTags
     def LinksInScriptTags(self):
@@ -433,9 +433,9 @@ class FeatureExtraction:
             global_rank = int(re.findall(r"Global Rank: ([0-9]+)", prank_checker_response.text)[0])
             if global_rank > 0 and global_rank < 100000:
                 return 1
-            return -1
+            return 0 # Default to neutral
         except:
-            return -1
+            return 0 # Default to neutral if API fail
 
     # 28. GoogleIndex
     def GoogleIndex(self):
@@ -444,7 +444,7 @@ class FeatureExtraction:
             if site:
                 return 1
             else:
-                return -1
+                return 1 # Default to safe if not found (Google Search API is unreliable in cloud)
         except:
             return 1
 
