@@ -1,5 +1,5 @@
 // Avoid scanning the scanner itself
-if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' || window.location.hostname === 'phishwall-ai.vercel.app') {
     console.log("PhishDetector: Skipping local/app check.");
 } else {
     // Initial scan on load
@@ -22,7 +22,7 @@ async function scanPage() {
     alertBox.innerHTML = '<div class="pd-spinner"></div> Scanning...';
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/predict', {
+        const response = await fetch('https://phishwall-ai.vercel.app/api/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
