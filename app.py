@@ -52,13 +52,15 @@ def api_predict():
     y_pred = gbc.predict(x)[0]
     # 1 is safe, -1 is unsafe
     
-    label = "Safe" if y_pred == 1 else "Phishing"
+    # Use convertion logic for consistency with web UI
+    result = convertion(url, int(y_pred))
+    label = result[1] # "Safe" or "Not Safe"
+    is_safe = (int(y_pred) == 1 and result[1] == "Safe")
     
     return jsonify({
         'url': url,
         'prediction': label,
-
-        'is_safe': int(y_pred) == 1
+        'is_safe': is_safe
     })
 
 if __name__ == "__main__":
