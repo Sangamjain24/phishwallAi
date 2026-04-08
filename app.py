@@ -47,6 +47,10 @@ def api_predict():
     x = np.array(obj.getFeaturesList()).reshape(1,30)
     y_pred = gbc.predict(x)[0]
     
+    # Debug logging for Vercel
+    print(f"DEBUG: URL={url}, Prediction={y_pred}")
+    print(f"DEBUG: Features={obj.getFeaturesList()}")
+    
     # Use convertion logic for consistency with web UI
     result = convertion(url, int(y_pred))
     label = result[1] # "Safe" or "Not Safe"
