@@ -1,7 +1,7 @@
 import ipaddress
 import re
 import urllib.request
-from urllib import response
+# from urllib import response
 
 #from Demos.win32cred_demo import domain
 from bs4 import BeautifulSoup
@@ -24,14 +24,14 @@ class FeatureExtraction:
         self.features = []
         self.url = url
         self.domain = ""
-        self.whois_response = ""
+        self.whois_response = None
         self.urlparse = ""
-        self.response = ""
-        self.soup = ""
+        self.response = type('obj', (object,), {'text': '', 'history': []})()
+        self.soup = BeautifulSoup("", 'html.parser')
 
         try:
-            self.response = requests.get(url)
-            self.soup = BeautifulSoup(response.text, 'html.parser')
+            self.response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}, timeout=10)
+            self.soup = BeautifulSoup(self.response.text, 'html.parser')
         except:
             pass
 
@@ -153,18 +153,12 @@ class FeatureExtraction:
     # 9.DomainRegLen
     def DomainRegLen(self):
         try:
+            if not self.whois_response or not self.whois_response.expiration_date or not self.whois_response.creation_date:
+                return -1
             expiration_date = self.whois_response.expiration_date
             creation_date = self.whois_response.creation_date
-            try:
-                if (len(expiration_date)):
-                    expiration_date = expiration_date[0]
-            except:
-                pass
-            try:
-                if (len(creation_date)):
-                    creation_date = creation_date[0]
-            except:
-                pass
+            if isinstance(expiration_date, list): expiration_date = expiration_date[0]
+            if isinstance(creation_date, list): creation_date = creation_date[0]
 
             age = (expiration_date.year - creation_date.year) * 12 + (expiration_date.month - creation_date.month)
             if age >= 12:
@@ -207,6 +201,7 @@ class FeatureExtraction:
     # 13. RequestURL
     def RequestURL(self):
         try:
+            i, success = 0, 0
             for img in self.soup.find_all('img', src=True):
                 dots = [x.start(0) for x in re.finditer('\.', img['src'])]
                 if self.url in img['src'] or self.domain in img['src'] or len(dots) == 1:
@@ -425,20 +420,17 @@ class FeatureExtraction:
     # 26. WebsiteTraffic
     def WebsiteTraffic(self):
         try:
-            rank = BeautifulSoup(urllib.request.urlopen("http://data.alexa.com/data?cli=10&dat=s&url=" + self.url).read(),
-                                 "xml").find("REACH")['RANK']
-            if (int(rank) < 100000):
-                return 1
+            # Alexa is retired, so we return 0 (Neutral)
             return 0
         except:
-            return -1
+            return 0
 
     # 27. PageRank
-    def PageRank(self, rank_checker_response=None):
+    def PageRank(self):
         try:
             prank_checker_response = requests.post("https://www.checkpagerank.net/index.php", {"name": self.domain})
 
-            global_rank = int(re.findall(r"Global Rank: ([0-9]+)", rank_checker_response.text)[0])
+            global_rank = int(re.findall(r"Global Rank: ([0-9]+)", prank_checker_response.text)[0])
             if global_rank > 0 and global_rank < 100000:
                 return 1
             return -1
