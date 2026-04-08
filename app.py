@@ -11,6 +11,36 @@ from convert import convertion
 warnings.filterwarnings('ignore')
 from feature import FeatureExtraction
 
+# Global Safelist of trusted domains to ensure 100% accuracy for common sites
+TRUSTED_DOMAINS = {
+    'google.com', 'google.co.in', 'facebook.com', 'instagram.com', 'whatsapp.com', 
+    'chatgpt.com', 'openai.com', 'youtube.com', 'github.com', 'linkedin.com', 
+    'twitter.com', 'x.com', 'amazon.com', 'amazon.in', 'netflix.com', 
+    'wikipedia.org', 'microsoft.com', 'apple.com', 'vercel.app', 'vercel.com',
+    'gmail.com', 'yahoo.com', 'outlook.com', 'bing.com', 'duckduckgo.com',
+    'reddit.com', 'stackoverflow.com', 'medium.com', 'spotify.com', 'canva.com',
+    'zoom.us', 'pinterest.com', 'quora.com', 'dropbox.com', 'adobe.com'
+}
+
+def is_on_safelist(url):
+    try:
+        from urllib.parse import urlparse
+        domain = urlparse(url).netloc.lower()
+        if domain.startswith('www.'):
+            domain = domain[4:]
+        
+        # Check if the domain itself is in our list
+        if domain in TRUSTED_DOMAINS:
+            return True
+        
+        # Check if it's a subdomain of a trusted domain
+        for trusted in TRUSTED_DOMAINS:
+            if domain.endswith('.' + trusted):
+                return True
+        return False
+    except:
+        return False
+
 file = open("newmodel.pkl","rb")
 gbc = pickle.load(file)
 file.close()
@@ -27,6 +57,12 @@ def home():
 def predict():
     if request.method == "POST":
         url = request.form["name"]
+        
+        # Check Safelist first
+        if is_on_safelist(url):
+            name = [url, "Safe", "Continue", "1"]
+            return render_template("index.html", name=name)
+
         obj = FeatureExtraction(url)
         x = np.array(obj.getFeaturesList()).reshape(1,30)
     
@@ -43,6 +79,16 @@ def usecases():
 def api_predict():
     data = request.get_json()
     url = data['url']
+
+    # Check Safelist first
+    if is_on_safelist(url):
+        return jsonify({
+            'url': url,
+            'prediction': 'Safe',
+            'action': 'Continue',
+            'is_safe': True
+        })
+
     obj = FeatureExtraction(url)
     x = np.array(obj.getFeaturesList()).reshape(1,30)
     y_pred = gbc.predict(x)[0]
